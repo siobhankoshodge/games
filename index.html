@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Game Collection | Interactive Adventures</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1a0033 0%, #000000 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 3px solid #DC143C;
+    }
+
+    h1 {
+      font-family: Impact, sans-serif;
+      font-size: 3rem;
+      color: #DC143C;
+      text-shadow: 3px 3px 0px #000;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-top: 0.5rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .game-card {
+      background: rgba(26, 26, 26, 0.8);
+      border: 4px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: #DC143C;
+      box-shadow: 0 8px 16px rgba(220, 20, 60, 0.4);
+    }
+
+    .game-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border-bottom: 3px solid #DC143C;
+    }
+
+    .game-content {
+      padding: 1.5rem;
+    }
+
+    .game-title {
+      font-family: Impact, sans-serif;
+      font-size: 1.5rem;
+      color: #DC143C;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-description {
+      color: #ccc;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      background: rgba(220, 20, 60, 0.2);
+      border: 1px solid #DC143C;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #DC143C;
+    }
+
+    .play-button {
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: #DC143C;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      font-family: Impact, sans-serif;
+      font-size: 1.1rem;
+      border: 3px solid #000;
+      border-radius: 4px;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 4px 4px 0px #000;
+    }
+
+    .play-button:hover {
+      background: #a00f2e;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #000;
+    }
+
+    .add-game {
+      background: rgba(50, 50, 50, 0.5);
+      border: 3px dashed #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      min-height: 300px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .add-game:hover {
+      border-color: #DC143C;
+      background: rgba(50, 50, 50, 0.7);
+    }
+
+    .add-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #DC143C;
+    }
+
+    .add-text {
+      font-size: 1.2rem;
+      color: #ccc;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 2px solid #333;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #DC143C;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎮 MY GAME COLLECTION</h1>
+      <p class="tagline">Interactive Adventures & Experiences</p>
+    </header>
+
+    <div class="games-grid">
+      
+      <!-- GAME 1: The Blackwood Ritual -->
+      <div class="game-card">
+        <div class="game-image">🏚️</div>
+        <div class="game-content">
+          <h2 class="game-title">THE BLACKWOOD RITUAL</h2>
+          <p class="game-description">
+            You are Sarah Chen, paranormal investigator. Explore a demon-haunted manor, 
+            make critical choices, and uncover the truth behind a 1987 ritual gone wrong. 
+            Can you save Margaret's soul and banish the demon?
+          </p>
+          <div class="game-tags">
+            <span class="tag">Horror</span>
+            <span class="tag">Choice-Driven</span>
+            <span class="tag">9 Endings</span>
+            <span class="tag">Illustrated</span>
+          </div>
+          <a href="https://siobhankoshodge.github.io/Horror-adventure/" class="play-button" target="_blank">
+            ▶ PLAY NOW
+          </a>
+        </div>
+      </div>
+
+      <!-- ADD MORE GAMES HERE -->
+      <!-- 
+      
+      Template for adding new games:
+      
+      <div class="game-card">
+        <div class="game-image">🎲</div>
+        <div class="game-content">
+          <h2 class="game-title">YOUR GAME TITLE</h2>
+          <p class="game-description">
+            Description of your game goes here. Make it exciting!
+          </p>
+          <div class="game-tags">
+            <span class="tag">Genre</span>
+            <span class="tag">Feature</span>
+            <span class="tag">Feature</span>
+          </div>
+          <a href="YOUR-GAME-URL" class="play-button" target="_blank">
+            ▶ PLAY NOW
+          </a>
+        </div>
+      </div>
+      
+      -->
+
+      <!-- Placeholder for Future Games -->
+      <div class="add-game">
+        <div class="add-icon">➕</div>
+        <div class="add-text">
+          More games<br>coming soon!
+        </div>
+      </div>
+
+    </div>
+
+    <!-- YouTube Channel Section -->
+    <div style="
+      background: linear-gradient(135deg, rgba(220, 20, 60, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
+      border: 3px solid #DC143C;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+    ">
+      <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎬</div>
+      <h2 style="font-family: Impact, sans-serif; font-size: 2rem; color: #DC143C; margin-bottom: 0.5rem;">
+        WATCH ME BUILD GAMES
+      </h2>
+      <p style="color: #ccc; margin-bottom: 1.5rem; font-size: 1.1rem;">
+        See how these games are made! Subscribe to AI Genie for game dev tutorials, AI tools, and creative coding.
+      </p>
+      <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank" style="
+        display: inline-block;
+        padding: 1rem 2rem;
+        background: #FF0000;
+        color: white;
+        text-decoration: none;
+        font-family: Impact, sans-serif;
+        font-size: 1.2rem;
+        border-radius: 4px;
+        border: 3px solid #000;
+        box-shadow: 4px 4px 0px #000;
+        transition: all 0.3s;
+      " onmouseover="this.style.transform='translate(2px, 2px)'; this.style.boxShadow='2px 2px 0px #000';" 
+         onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='4px 4px 0px #000';">
+        ▶ SUBSCRIBE ON YOUTUBE
+      </a>
+    </div>
+
+    <footer>
+      <p>Made with 🎮 by Siobhan Koshodge</p>
+      <p style="margin-top: 0.5rem;">
+        <a href="https://github.com/siobhankoshodge" target="_blank">GitHub</a> • 
+        <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank">YouTube</a> • 
+        <a href="mailto:your-email@example.com">Contact</a>
+      </p>
+      <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+        🎬 Watch game dev tutorials on <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank">AI Genie YouTube</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
