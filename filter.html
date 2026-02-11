@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse & Filter Games | My Game Collection</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1a0033 0%, #000000 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 3px solid #DC143C;
+    }
+
+    h1 {
+      font-family: Impact, sans-serif;
+      font-size: 3rem;
+      color: #DC143C;
+      text-shadow: 3px 3px 0px #000;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-top: 0.5rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: #DC143C;
+      text-decoration: none;
+      font-family: Impact, sans-serif;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: #ff3060;
+      text-decoration: underline;
+    }
+
+    /* Filter Controls */
+    .filter-section {
+      margin-bottom: 2rem;
+    }
+
+    .filter-section h2 {
+      font-family: Impact, sans-serif;
+      font-size: 1.5rem;
+      color: #DC143C;
+      margin-bottom: 1rem;
+    }
+
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-btn {
+      background: rgba(220, 20, 60, 0.15);
+      border: 2px solid #555;
+      padding: 0.5rem 1.25rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      color: #ccc;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    }
+
+    .filter-btn:hover {
+      border-color: #DC143C;
+      color: #fff;
+      background: rgba(220, 20, 60, 0.3);
+    }
+
+    .filter-btn.active {
+      background: #DC143C;
+      border-color: #DC143C;
+      color: #fff;
+      box-shadow: 0 0 8px rgba(220, 20, 60, 0.5);
+    }
+
+    .results-count {
+      color: #888;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-count span {
+      color: #DC143C;
+      font-weight: bold;
+    }
+
+    /* Games Grid */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .game-card {
+      background: rgba(26, 26, 26, 0.8);
+      border: 4px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: #DC143C;
+      box-shadow: 0 8px 16px rgba(220, 20, 60, 0.4);
+    }
+
+    .game-card.hidden {
+      display: none;
+    }
+
+    .game-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border-bottom: 3px solid #DC143C;
+    }
+
+    .game-content {
+      padding: 1.5rem;
+    }
+
+    .game-title {
+      font-family: Impact, sans-serif;
+      font-size: 1.5rem;
+      color: #DC143C;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-description {
+      color: #ccc;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .game-category {
+      display: inline-block;
+      background: rgba(220, 20, 60, 0.4);
+      border: 1px solid #DC143C;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      background: rgba(220, 20, 60, 0.2);
+      border: 1px solid #DC143C;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #DC143C;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tag:hover {
+      background: rgba(220, 20, 60, 0.4);
+      color: #fff;
+    }
+
+    .tag.highlight {
+      background: rgba(220, 20, 60, 0.5);
+      color: #fff;
+    }
+
+    .play-button {
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: #DC143C;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      font-family: Impact, sans-serif;
+      font-size: 1.1rem;
+      border: 3px solid #000;
+      border-radius: 4px;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 4px 4px 0px #000;
+    }
+
+    .play-button:hover {
+      background: #a00f2e;
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #000;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #888;
+      font-size: 1.2rem;
+      display: none;
+    }
+
+    .no-results .no-results-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 2px solid #333;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #DC143C;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-btn {
+        padding: 0.4rem 0.9rem;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔍 BROWSE & FILTER</h1>
+      <p class="tagline">Find the perfect game by category, genre, or feature</p>
+      <a href="index.html" class="back-link">← Back to Collection</a>
+    </header>
+
+    <!-- Category Filters -->
+    <div class="filter-section">
+      <h2>FILTER BY CATEGORY</h2>
+      <div class="category-filters" id="categoryFilters">
+        <button class="filter-btn active" data-filter="all">All Games</button>
+        <button class="filter-btn" data-filter="horror">Horror</button>
+        <button class="filter-btn" data-filter="adventure">Adventure</button>
+        <button class="filter-btn" data-filter="relaxation">Relaxation</button>
+        <button class="filter-btn" data-filter="simulation">Simulation</button>
+        <button class="filter-btn" data-filter="puzzle">Puzzle</button>
+      </div>
+
+      <h2>FILTER BY FEATURE</h2>
+      <div class="category-filters" id="featureFilters">
+        <button class="filter-btn" data-feature="choice-driven">Choice-Driven</button>
+        <button class="filter-btn" data-feature="multiple-endings">Multiple Endings</button>
+        <button class="filter-btn" data-feature="audio">Audio / Music</button>
+        <button class="filter-btn" data-feature="illustrated">Illustrated</button>
+        <button class="filter-btn" data-feature="interactive">Interactive</button>
+      </div>
+
+      <p class="results-count">Showing <span id="resultCount">4</span> of <span id="totalCount">4</span> games</p>
+    </div>
+
+    <!-- Games Grid -->
+    <div class="games-grid" id="gamesGrid">
+
+      <!-- GAME 1: The Blackwood Ritual -->
+      <div class="game-card" data-categories="horror" data-features="choice-driven multiple-endings illustrated">
+        <div class="game-image">🏚️</div>
+        <div class="game-content">
+          <span class="game-category">Horror</span>
+          <h2 class="game-title">THE BLACKWOOD RITUAL</h2>
+          <p class="game-description">
+            You are Sarah Chen, paranormal investigator. Explore a demon-haunted manor,
+            make critical choices, and uncover the truth behind a 1987 ritual gone wrong.
+            Can you save Margaret's soul and banish the demon?
+          </p>
+          <div class="game-tags">
+            <span class="tag" data-tag-filter="horror">Horror</span>
+            <span class="tag" data-tag-filter="choice-driven">Choice-Driven</span>
+            <span class="tag" data-tag-filter="multiple-endings">9 Endings</span>
+            <span class="tag" data-tag-filter="illustrated">Illustrated</span>
+          </div>
+          <a href="https://siobhankoshodge.github.io/Horror-adventure/" class="play-button" target="_blank">
+            ▶ PLAY NOW
+          </a>
+        </div>
+      </div>
+
+      <!-- GAME 2: The Bureaucratic Apocalypse -->
+      <div class="game-card" data-categories="horror simulation" data-features="choice-driven multiple-endings">
+        <div class="game-image">🖥️</div>
+        <div class="game-content">
+          <span class="game-category">Simulation</span>
+          <h2 class="game-title">THE BUREAUCRATIC APOCALYPSE</h2>
+          <p class="game-description">
+            You're an Operations Manager at a government facility. It's Friday, 4:47 PM.
+            The apocalypse started 4 hours ago. Your shift ends at 6 PM. Protocol must be followed.
+            Manage 47 staff, make impossible choices, and survive the horror of doing your job while reality collapses.
+          </p>
+          <div class="game-tags">
+            <span class="tag" data-tag-filter="horror">Office Horror</span>
+            <span class="tag" data-tag-filter="simulation">AI Apocalypse</span>
+            <span class="tag" data-tag-filter="multiple-endings">9 Endings</span>
+            <span class="tag" data-tag-filter="simulation">Management Sim</span>
+          </div>
+          <a href="https://siobhankoshodge.github.io/bureaucratic-apocalypse/" class="play-button" target="_blank">
+            ▶ PLAY NOW
+          </a>
+        </div>
+      </div>
+
+      <!-- GAME 3: Manifestation Meadow -->
+      <div class="game-card" data-categories="relaxation" data-features="audio interactive">
+        <div class="game-image">🌸</div>
+        <div class="game-content">
+          <span class="game-category">Relaxation</span>
+          <h2 class="game-title">MANIFESTATION MEADOW</h2>
+          <p class="game-description">
+            A browser-based mindfulness tool where you set intentions and watch your digital garden grow.
+            Choose your words, plant seeds of intention, and watch them bloom into a peaceful summer meadow.
+            Features generative pentatonic wind chimes and gentle breeze animations for ultimate relaxation.
+          </p>
+          <div class="game-tags">
+            <span class="tag" data-tag-filter="relaxation">Mindfulness</span>
+            <span class="tag" data-tag-filter="relaxation">Relaxation</span>
+            <span class="tag" data-tag-filter="audio">Generative Audio</span>
+            <span class="tag" data-tag-filter="interactive">Interactive Garden</span>
+          </div>
+          <a href="https://siobhankoshodge.github.io/LoFi/" class="play-button" target="_blank">
+            ▶ PLAY NOW
+          </a>
+        </div>
+      </div>
+
+      <!-- GAME 4: Ra Ba Back in Time -->
+      <div class="game-card" data-categories="adventure puzzle" data-features="choice-driven interactive">
+        <div class="game-image">🐑</div>
+        <div class="game-content">
+          <span class="game-category">Adventure</span>
+          <h2 class="game-title">RA BA BACK IN TIME</h2>
+          <p class="game-description">
+            An interactive time-traveling adventure with sheep! Journey through different eras,
+            solve puzzles, and help Ra Ba navigate through time. A whimsical game combining
+            humor, history, and adorable woolly companions.
+          </p>
+          <div class="game-tags">
+            <span class="tag" data-tag-filter="adventure">Adventure</span>
+            <span class="tag" data-tag-filter="adventure">Time Travel</span>
+            <span class="tag" data-tag-filter="puzzle">Puzzle</span>
+            <span class="tag" data-tag-filter="interactive">Whimsical</span>
+          </div>
+          <a href="https://siobhankoshodge.github.io/rababack/" class="play-button" target="_blank">
+            ▶ PLAY NOW
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- No Results Message -->
+    <div class="no-results" id="noResults">
+      <div class="no-results-icon">🎮</div>
+      <p>No games match the selected filters.</p>
+      <p style="margin-top: 0.5rem; font-size: 0.95rem;">Try selecting a different category or feature.</p>
+    </div>
+
+    <footer>
+      <p>Made with 🎮 by Siobhan Koshodge</p>
+      <p style="margin-top: 0.5rem;">
+        <a href="index.html">Home</a> &bull;
+        <a href="https://github.com/siobhankoshodge" target="_blank">GitHub</a> &bull;
+        <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank">YouTube</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    const games = document.querySelectorAll('.game-card');
+    const categoryBtns = document.querySelectorAll('#categoryFilters .filter-btn');
+    const featureBtns = document.querySelectorAll('#featureFilters .filter-btn');
+    const resultCount = document.getElementById('resultCount');
+    const totalCount = document.getElementById('totalCount');
+    const noResults = document.getElementById('noResults');
+
+    let activeCategory = 'all';
+    let activeFeatures = new Set();
+
+    totalCount.textContent = games.length;
+
+    // Category filter buttons
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    // Feature filter buttons (toggle)
+    featureBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const feature = btn.dataset.feature;
+        if (activeFeatures.has(feature)) {
+          activeFeatures.delete(feature);
+        } else {
+          activeFeatures.add(feature);
+        }
+        applyFilters();
+      });
+    });
+
+    // Clickable tags on cards
+    document.querySelectorAll('.tag[data-tag-filter]').forEach(tag => {
+      tag.addEventListener('click', () => {
+        const filter = tag.dataset.tagFilter;
+
+        // Check if it matches a category
+        const categoryBtn = document.querySelector(`#categoryFilters .filter-btn[data-filter="${filter}"]`);
+        if (categoryBtn) {
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          categoryBtn.classList.add('active');
+          activeCategory = filter;
+          applyFilters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        // Check if it matches a feature
+        const featureBtn = document.querySelector(`#featureFilters .filter-btn[data-feature="${filter}"]`);
+        if (featureBtn) {
+          featureBtn.classList.toggle('active');
+          if (activeFeatures.has(filter)) {
+            activeFeatures.delete(filter);
+          } else {
+            activeFeatures.add(filter);
+          }
+          applyFilters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+
+    function applyFilters() {
+      let visibleCount = 0;
+
+      games.forEach(card => {
+        const categories = card.dataset.categories.split(' ');
+        const features = card.dataset.features.split(' ');
+
+        const matchesCategory = activeCategory === 'all' || categories.includes(activeCategory);
+        const matchesFeatures = activeFeatures.size === 0 ||
+          [...activeFeatures].every(f => features.includes(f));
+
+        if (matchesCategory && matchesFeatures) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      resultCount.textContent = visibleCount;
+      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+
+      // Highlight active tags on visible cards
+      document.querySelectorAll('.tag[data-tag-filter]').forEach(tag => {
+        const filter = tag.dataset.tagFilter;
+        if (filter === activeCategory || activeFeatures.has(filter)) {
+          tag.classList.add('highlight');
+        } else {
+          tag.classList.remove('highlight');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
