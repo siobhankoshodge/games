@@ -1,398 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Game Collection | Interactive Adventures</title>
-  
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Collection — AI Alchemist</title>
+  <meta name="description" content="Vibe-coded games and interactive experiments by AI Alchemist. Horror adventures, mindfulness tools, football training and more." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230D1B2A'/><text y='82' x='10' font-size='78' font-family='serif'>⚗️</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0D1B2A;
+      --navy-mid:  #152232;
+      --navy-card: #1A2D40;
+      --teal:      #5BC8C0;
+      --teal-dark: #3A9E97;
+      --teal-glow: rgba(91, 200, 192, 0.15);
+      --white:     #F0FAFA;
+      --muted:     #8BB8C0;
+      --border:    rgba(91, 200, 192, 0.2);
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #1a0033 0%, #000000 100%);
-      color: #fff;
-      min-height: 100vh;
-      padding: 2rem 1rem;
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    .container {
-      max-width: 1200px;
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(13, 27, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none; align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted); font-size: 0.9rem; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-links .nav-active { color: var(--teal); }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      nav { padding: 1rem 1.5rem; }
+    }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: 10rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--navy);
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 70%, rgba(91, 200, 192, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(91, 200, 192, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .page-header::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 80%);
+      pointer-events: none; opacity: 0.35;
+    }
+    .page-header-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--teal-glow);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.78rem;
+      color: var(--teal);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      position: relative; z-index: 1;
+    }
+    .page-header-badge::before { content: '✦'; font-size: 0.65rem; }
+    .page-header h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      position: relative; z-index: 1;
+      margin-bottom: 0.5rem;
+    }
+    .page-header h1 span { color: var(--teal); }
+    .page-header p {
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      position: relative; z-index: 1;
+      max-width: 500px;
       margin: 0 auto;
     }
+    .page-header p em { color: var(--teal); font-style: normal; font-weight: 500; }
 
-    header {
-      text-align: center;
+    /* ─── SECTION SHARED ─── */
+    section { width: 100%; }
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      color: var(--teal);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    .section-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--teal); border-radius: 2px; }
+    h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 540px;
       margin-bottom: 3rem;
-      padding-bottom: 2rem;
-      border-bottom: 3px solid #DC143C;
     }
 
-    h1 {
-      font-family: Impact, sans-serif;
-      font-size: 3rem;
-      color: #DC143C;
-      text-shadow: 3px 3px 0px #000;
-      margin-bottom: 0.5rem;
-    }
-
-    .tagline {
-      font-size: 1.1rem;
-      color: #ccc;
-      margin-top: 0.5rem;
-    }
-
+    /* ─── GAMES GRID ─── */
+    #games { background: var(--navy-mid); }
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
     }
 
+    /* ─── GAME CARD ─── */
     .game-card {
-      background: rgba(26, 26, 26, 0.8);
-      border: 4px solid #333;
-      border-radius: 8px;
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
       overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      display: flex; flex-direction: column;
+      transition: all 0.25s;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
     }
-
+    .game-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
     .game-card:hover {
-      transform: translateY(-5px);
-      border-color: #DC143C;
-      box-shadow: 0 8px 16px rgba(220, 20, 60, 0.4);
+      transform: translateY(-6px);
+      border-color: rgba(91,200,192,0.45);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.35), 0 0 30px rgba(91,200,192,0.08);
     }
+    .game-card:hover::before { opacity: 1; }
 
-    .game-image {
-      width: 100%;
-      height: 200px;
+    .game-thumb {
+      height: 180px;
+      background: var(--navy);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .game-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    .game-thumb img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-      border-bottom: 3px solid #DC143C;
+      object-position: center;
+      display: block;
+      z-index: 1;
     }
-
-    .game-content {
-      padding: 1.5rem;
+    .game-thumb .thumb-fallback {
+      position: relative; z-index: 2;
     }
+    /* hide fallback emoji when image loads */
+    .game-thumb img.loaded + .thumb-fallback { display: none; }
 
-    .game-title {
-      font-family: Impact, sans-serif;
-      font-size: 1.5rem;
-      color: #DC143C;
-      margin-bottom: 0.5rem;
+    .game-body {
+      padding: 1.6rem;
+      display: flex; flex-direction: column; flex: 1;
     }
-
-    .game-description {
-      color: #ccc;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-    }
-
     .game-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      margin-bottom: 0.8rem;
     }
-
-    .tag {
-      background: rgba(220, 20, 60, 0.2);
-      border: 1px solid #DC143C;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: #DC143C;
-    }
-
-    .play-button {
+    .game-tag {
       display: inline-block;
-      width: 100%;
+      background: var(--teal-glow);
+      border: 1px solid var(--border);
+      color: var(--teal);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.65rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .game-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .game-desc {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 1.5rem;
+    }
+    .game-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
       padding: 0.75rem 1.5rem;
-      background: #DC143C;
-      color: white;
-      text-decoration: none;
-      text-align: center;
-      font-family: Impact, sans-serif;
-      font-size: 1.1rem;
-      border: 3px solid #000;
-      border-radius: 4px;
-      transition: background 0.3s, transform 0.2s;
-      box-shadow: 4px 4px 0px #000;
-    }
-
-    .play-button:hover {
-      background: #a00f2e;
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0px #000;
-    }
-
-    .add-game {
-      background: rgba(50, 50, 50, 0.5);
-      border: 3px dashed #555;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 1.5rem;
-      min-height: 300px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: border-color 0.3s, background 0.3s;
-    }
-
-    .add-game:hover {
-      border-color: #DC143C;
-      background: rgba(50, 50, 50, 0.7);
-    }
-
-    .add-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      color: #DC143C;
-    }
-
-    .add-text {
-      font-size: 1.2rem;
-      color: #ccc;
-      text-align: center;
-    }
-
-    footer {
-      text-align: center;
-      padding-top: 2rem;
-      border-top: 2px solid #333;
-      color: #888;
+      background: var(--teal);
+      color: var(--navy);
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #DC143C;
+      font-weight: 700;
+      letter-spacing: 0.04em;
       text-decoration: none;
+      border-radius: 8px;
+      border: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .game-btn:hover {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(91,200,192,0.25);
+    }
+    .game-btn svg { transition: transform 0.2s; }
+    .game-card:hover .game-btn svg { transform: translateX(3px); }
+
+    /* ─── PLACEHOLDER CARD ─── */
+    .game-card-placeholder {
+      background: rgba(26, 45, 64, 0.4);
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+      min-height: 300px;
+      text-align: center;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .game-card-placeholder:hover {
+      border-color: rgba(91,200,192,0.5);
+      background: rgba(26, 45, 64, 0.6);
+    }
+    .placeholder-icon { font-size: 2.5rem; margin-bottom: 0.8rem; opacity: 0.5; }
+    .placeholder-text { color: var(--muted); font-size: 0.95rem; font-weight: 500; }
+
+    /* ─── YOUTUBE SECTION ─── */
+    #youtube { background: var(--navy); }
+    .youtube-banner {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3.5rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .youtube-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(91,200,192,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .youtube-banner-icon { font-size: 3rem; margin-bottom: 1rem; display: block; position: relative; z-index: 1; }
+    .youtube-banner h2 { position: relative; z-index: 1; margin-bottom: 0.8rem; }
+    .youtube-banner p { color: var(--muted); max-width: 520px; margin: 0 auto 2rem; font-size: 1rem; position: relative; z-index: 1; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: var(--navy);
+      border: 2px solid var(--teal);
+    }
+    .btn-primary:hover {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(91,200,192,0.25);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--teal);
+      border: 2px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--teal);
+      background: var(--teal-glow);
+      transform: translateY(-2px);
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
     }
+    footer p { color: var(--muted); font-size: 0.85rem; }
+    footer strong { color: var(--teal); }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--teal); }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .games-grid {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 600px) {
+      .section-inner { padding: 3.5rem 1.5rem; }
+      .youtube-banner { padding: 2.5rem 1.5rem; }
+      .games-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🎮 MY GAME COLLECTION</h1>
-      <p class="tagline">Interactive Adventures & Experiences</p>
-    </header>
 
-    <div class="games-grid">
-      
-      <!-- GAME 1: The Blackwood Ritual -->
-      <div class="game-card">
-        <div class="game-image">🏚️</div>
-        <div class="game-content">
-          <h2 class="game-title">THE BLACKWOOD RITUAL</h2>
-          <p class="game-description">
-            You are Sarah Chen, paranormal investigator. Explore a demon-haunted manor, 
-            make critical choices, and uncover the truth behind a 1987 ritual gone wrong. 
-            Can you save Margaret's soul and banish the demon?
-          </p>
-          <div class="game-tags">
-            <span class="tag">Horror</span>
-            <span class="tag">Choice-Driven</span>
-            <span class="tag">9 Endings</span>
-            <span class="tag">Illustrated</span>
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="https://siobhankoshodge.github.io/">AI ALCHEMIST</a>
+    <ul class="nav-links">
+      <li><a class="nav-active" href="#">Games</a></li>
+      <li><a href="https://siobhankoshodge.github.io/resources/">Resources</a></li>
+      <li><a href="https://siobhankoshodge.github.io/#social">Connect</a></li>
+      <li><a href="https://github.com/siobhankoshodge" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-badge">Vibe Coding Experiments</div>
+    <h1>Game <span>Collection</span></h1>
+    <p>Interactive adventures built with <em>AI &amp; curiosity</em>. No rules. Just vibes.</p>
+  </div>
+
+  <!-- GAMES -->
+  <section id="games">
+    <div class="section-inner">
+      <div class="section-label">Play Now</div>
+      <h2>All Games</h2>
+      <p class="section-sub">Five experiments and counting — each one built differently, each one a little chaotic.</p>
+
+      <div class="games-grid">
+
+        <!-- GAME 1 -->
+        <div class="game-card">
+          <div class="game-thumb">
+            <img src="images/blackwood-ritual.jpg" alt="The Blackwood Ritual"
+              onload="this.classList.add('loaded')"
+              onerror="this.style.display='none'">
+            <span class="thumb-fallback">🏚️</span>
           </div>
-          <a href="https://siobhankoshodge.github.io/Horror-adventure/" class="play-button" target="_blank">
-            ▶ PLAY NOW
-          </a>
-        </div>
-      </div>
-
-      <!-- GAME 2: The Bureaucratic Apocalypse -->
-      <div class="game-card">
-        <div class="game-image">🖥️</div>
-        <div class="game-content">
-          <h2 class="game-title">THE BUREAUCRATIC APOCALYPSE</h2>
-          <p class="game-description">
-            You're an Operations Manager at a government facility. It's Friday, 4:47 PM. 
-            The apocalypse started 4 hours ago. Your shift ends at 6 PM. Protocol must be followed. 
-            Manage 47 staff, make impossible choices, and survive the horror of doing your job while reality collapses.
-          </p>
-          <div class="game-tags">
-            <span class="tag">Office Horror</span>
-            <span class="tag">AI Apocalypse</span>
-            <span class="tag">9 Endings</span>
-            <span class="tag">Management Sim</span>
+          <div class="game-body">
+            <div class="game-tags">
+              <span class="game-tag">Horror</span>
+              <span class="game-tag">Choice-Driven</span>
+              <span class="game-tag">9 Endings</span>
+              <span class="game-tag">Illustrated</span>
+            </div>
+            <h3 class="game-title">The Blackwood Ritual</h3>
+            <p class="game-desc">You are Sarah Chen, paranormal investigator. Explore a demon-haunted manor, make critical choices, and uncover the truth behind a 1987 ritual gone wrong. Can you save Margaret's soul and banish the demon?</p>
+            <a href="https://siobhankoshodge.github.io/Horror-adventure/" target="_blank" rel="noopener" class="game-btn">
+              ▶ Play Now
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
           </div>
-          <a href="https://siobhankoshodge.github.io/bureaucratic-apocalypse/" class="play-button" target="_blank">
-            ▶ PLAY NOW
-          </a>
         </div>
-      </div>
 
-      <!-- GAME 3: Manifestation Meadow -->
-      <div class="game-card">
-        <div class="game-image">🌸</div>
-        <div class="game-content">
-          <h2 class="game-title">MANIFESTATION MEADOW</h2>
-          <p class="game-description">
-            A browser-based mindfulness tool where you set intentions and watch your digital garden grow. 
-            Choose your words, plant seeds of intention, and watch them bloom into a peaceful summer meadow. 
-            Features generative pentatonic wind chimes and gentle breeze animations for ultimate relaxation.
-          </p>
-          <div class="game-tags">
-            <span class="tag">Mindfulness</span>
-            <span class="tag">Relaxation</span>
-            <span class="tag">Generative Audio</span>
-            <span class="tag">Interactive Garden</span>
+        <!-- GAME 2 -->
+        <div class="game-card">
+          <div class="game-thumb">
+            <img src="images/bureaucratic-apocalypse.jpg" alt="The Bureaucratic Apocalypse"
+              onload="this.classList.add('loaded')"
+              onerror="this.style.display='none'">
+            <span class="thumb-fallback">🖥️</span>
           </div>
-          <a href="https://siobhankoshodge.github.io/LoFi/" class="play-button" target="_blank">
-            ▶ PLAY NOW
-          </a>
-        </div>
-      </div>
-
-      <!-- GAME 4: Ra Ba Back in Time -->
-      <div class="game-card">
-        <div class="game-image">🐑</div>
-        <div class="game-content">
-          <h2 class="game-title">RA BA BACK IN TIME</h2>
-          <p class="game-description">
-            An interactive time-traveling adventure with sheep! Journey through different eras, 
-            solve puzzles, and help Ra Ba navigate through time. A whimsical game combining 
-            humor, history, and adorable woolly companions.
-          </p>
-          <div class="game-tags">
-            <span class="tag">Adventure</span>
-            <span class="tag">Time Travel</span>
-            <span class="tag">Puzzle</span>
-            <span class="tag">Whimsical</span>
+          <div class="game-body">
+            <div class="game-tags">
+              <span class="game-tag">Office Horror</span>
+              <span class="game-tag">AI Apocalypse</span>
+              <span class="game-tag">9 Endings</span>
+              <span class="game-tag">Management Sim</span>
+            </div>
+            <h3 class="game-title">The Bureaucratic Apocalypse</h3>
+            <p class="game-desc">You're an Operations Manager at a government facility. It's Friday, 4:47 PM. The apocalypse started 4 hours ago. Your shift ends at 6 PM. Protocol must be followed.</p>
+            <a href="https://siobhankoshodge.github.io/bureaucratic-apocalypse/" target="_blank" rel="noopener" class="game-btn">
+              ▶ Play Now
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
           </div>
-          <a href="https://siobhankoshodge.github.io/rababack/" class="play-button" target="_blank">
-            ▶ PLAY NOW
-          </a>
         </div>
-      </div>
 
-      <!-- GAME 5: Meerkat Training Camp -->
-      <div class="game-card">
-        <div class="game-image">⚽</div>
-        <div class="game-content">
-          <h2 class="game-title">MEERKAT TRAINING CAMP</h2>
-          <p class="game-description">
-            An interactive football training game built for The Meerkats under-8s girls team!
-            Master 6 skill mini-games including shooting practice, dribble mazes, keepie-uppies,
-            goalkeeper saves, tackling, and formation challenges. Earn up to 3 stars per game!
-          </p>
-          <div class="game-tags">
-            <span class="tag">Football</span>
-            <span class="tag">Kids</span>
-            <span class="tag">6 Mini-Games</span>
-            <span class="tag">Star Ratings</span>
+        <!-- GAME 3 -->
+        <div class="game-card">
+          <div class="game-thumb">
+            <img src="images/manifestation-meadow.jpg" alt="Manifestation Meadow"
+              onload="this.classList.add('loaded')"
+              onerror="this.style.display='none'">
+            <span class="thumb-fallback">🌸</span>
           </div>
-          <a href="https://siobhankoshodge.github.io/meerkat-training-camp/" class="play-button" target="_blank">
-            ▶ PLAY NOW
-          </a>
-        </div>
-      </div>
-
-      <!-- ADD MORE GAMES HERE -->
-      <!-- 
-      
-      Template for adding new games:
-      
-      <div class="game-card">
-        <div class="game-image">🎲</div>
-        <div class="game-content">
-          <h2 class="game-title">YOUR GAME TITLE</h2>
-          <p class="game-description">
-            Description of your game goes here. Make it exciting!
-          </p>
-          <div class="game-tags">
-            <span class="tag">Genre</span>
-            <span class="tag">Feature</span>
-            <span class="tag">Feature</span>
+          <div class="game-body">
+            <div class="game-tags">
+              <span class="game-tag">Mindfulness</span>
+              <span class="game-tag">Relaxation</span>
+              <span class="game-tag">Generative Audio</span>
+              <span class="game-tag">Interactive Garden</span>
+            </div>
+            <h3 class="game-title">Manifestation Meadow</h3>
+            <p class="game-desc">Set intentions and watch your digital garden grow. Choose your words, plant seeds of intention, and watch them bloom into a peaceful summer meadow with generative pentatonic wind chimes.</p>
+            <a href="https://siobhankoshodge.github.io/LoFi/" target="_blank" rel="noopener" class="game-btn">
+              ▶ Play Now
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
           </div>
-          <a href="YOUR-GAME-URL" class="play-button" target="_blank">
-            ▶ PLAY NOW
-          </a>
         </div>
-      </div>
-      
-      -->
 
-      <!-- Placeholder for Future Games -->
-      <div class="add-game">
-        <div class="add-icon">➕</div>
-        <div class="add-text">
-          More games<br>coming soon!
+        <!-- GAME 4 -->
+        <div class="game-card">
+          <div class="game-thumb">
+            <img src="images/rababack.jpg" alt="Ra Ba Back in Time"
+              onload="this.classList.add('loaded')"
+              onerror="this.style.display='none'">
+            <span class="thumb-fallback">🐑</span>
+          </div>
+          <div class="game-body">
+            <div class="game-tags">
+              <span class="game-tag">Adventure</span>
+              <span class="game-tag">Time Travel</span>
+              <span class="game-tag">Puzzle</span>
+              <span class="game-tag">Whimsical</span>
+            </div>
+            <h3 class="game-title">Ra Ba Back in Time</h3>
+            <p class="game-desc">An interactive time-travelling adventure with sheep! Journey through different eras, solve puzzles, and help Ra Ba navigate through time. Whimsy, history, and adorable woolly companions.</p>
+            <a href="https://siobhankoshodge.github.io/rababack/" target="_blank" rel="noopener" class="game-btn">
+              ▶ Play Now
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
         </div>
-      </div>
 
+        <!-- GAME 5 -->
+        <div class="game-card">
+          <div class="game-thumb">
+            <img src="images/meerkat-training-camp.jpg" alt="Meerkat Training Camp"
+              onload="this.classList.add('loaded')"
+              onerror="this.style.display='none'">
+            <span class="thumb-fallback">⚽</span>
+          </div>
+          <div class="game-body">
+            <div class="game-tags">
+              <span class="game-tag">Football</span>
+              <span class="game-tag">Kids</span>
+              <span class="game-tag">6 Mini-Games</span>
+              <span class="game-tag">Star Ratings</span>
+            </div>
+            <h3 class="game-title">Meerkat Training Camp</h3>
+            <p class="game-desc">Built for The Meerkats under-8s girls team! Master 6 skill mini-games — shooting, dribble mazes, keepie-uppies, goalkeeper saves, tackling, and formation challenges. Earn up to 3 stars per game!</p>
+            <a href="https://siobhankoshodge.github.io/meerkat-training-camp/" target="_blank" rel="noopener" class="game-btn">
+              ▶ Play Now
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- PLACEHOLDER -->
+        <div class="game-card-placeholder">
+          <div class="placeholder-icon">✦</div>
+          <p class="placeholder-text">More games<br/>coming soon</p>
+        </div>
+
+      </div>
     </div>
+  </section>
 
-    <!-- YouTube Channel Section -->
-    <div style="
-      background: linear-gradient(135deg, rgba(220, 20, 60, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
-      border: 3px solid #DC143C;
-      border-radius: 8px;
-      padding: 2rem;
-      text-align: center;
-      margin-bottom: 3rem;
-      box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
-    ">
-      <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎬</div>
-      <h2 style="font-family: Impact, sans-serif; font-size: 2rem; color: #DC143C; margin-bottom: 0.5rem;">
-        WATCH ME BUILD GAMES
-      </h2>
-      <p style="color: #ccc; margin-bottom: 1.5rem; font-size: 1.1rem;">
-        See how these games are made! Subscribe to AI Genie for game dev tutorials, AI tools, and creative coding.
-      </p>
-      <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank" style="
-        display: inline-block;
-        padding: 1rem 2rem;
-        background: #FF0000;
-        color: white;
-        text-decoration: none;
-        font-family: Impact, sans-serif;
-        font-size: 1.2rem;
-        border-radius: 4px;
-        border: 3px solid #000;
-        box-shadow: 4px 4px 0px #000;
-        transition: all 0.3s;
-      " onmouseover="this.style.transform='translate(2px, 2px)'; this.style.boxShadow='2px 2px 0px #000';" 
-         onmouseout="this.style.transform='translate(0, 0)'; this.style.boxShadow='4px 4px 0px #000';">
-        ▶ SUBSCRIBE ON YOUTUBE
-      </a>
+  <!-- YOUTUBE -->
+  <section id="youtube">
+    <div class="section-inner">
+      <div class="youtube-banner">
+        <span class="youtube-banner-icon">🎬</span>
+        <h2>Watch Me <span style="color:var(--teal)">Build</span> These</h2>
+        <p>See how these games are made — AI tools, creative coding, and zero gatekeeping. Subscribe to AI Alchemist for game dev tutorials and experiments.</p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; position:relative; z-index:1;">
+          <a href="https://www.youtube.com/@AIAlchemist-19" target="_blank" rel="noopener" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Subscribe on YouTube
+          </a>
+          <a href="https://siobhankoshodge.github.io/" class="btn btn-secondary">
+            ← Back to Home
+          </a>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <footer>
-      <p>Made with 🎮 by Siobhan Koshodge</p>
-      <p style="margin-top: 0.5rem;">
-        <a href="https://github.com/siobhankoshodge" target="_blank">GitHub</a> • 
-        <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank">YouTube</a> • 
-        <a href="/cdn-cgi/l/email-protection#86ffe9f3f4abe3ebe7efeac6e3fee7ebf6eae3a8e5e9eb">Contact</a>
-      </p>
-      <p style="margin-top: 0.5rem; font-size: 0.85rem;">
-        🎬 Watch game dev tutorials on <a href="https://www.youtube.com/channel/UCe-zRnezqJVnHbbSPY88dGA" target="_blank">AI Genie YouTube</a>
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      Built with curiosity &amp; a bit of AI magic ·
+      <strong>AI Alchemist</strong> ·
+      <a href="https://github.com/siobhankoshodge" target="_blank" rel="noopener">@siobhankoshodge</a>
+    </p>
+  </footer>
+
+</body>
+</html>
